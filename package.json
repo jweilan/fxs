@@ -1,0 +1,22 @@
+{
+  "name": "admin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "node build/build.js",
+    "gulps": "gulp test",
+    "start": "npm run gulps && npm run build "
+  },
+  "author": "jwei",
+  "license": "ISC",
+  "devDependencies": {
+    "express": "^4.16.3",
+    "gulp": "^3.9.1",
+    "gulp-clean-css": "^3.9.4",
+    "gulp-concat": "^2.6.1",
+    "gulp-uglify": "^3.0.0",
+    "http-proxy-middleware": "^0.18.0"
+  }
+}

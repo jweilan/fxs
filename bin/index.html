@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta name="viewport" content="width=device-width,user-scalable=no">
+	<meta name = "format-detection" content = "telephone=no">
+	<meta charset="UTF-8">
+	<title>Distributor System</title>
+	<!-- <link rel="stylesheet" type="text/css" href="build/main.css"> -->
+	<link rel="stylesheet" type="text/css" href="css/index.css">
+	<link rel="stylesheet" type="text/css" href="css/mobiscroll.custom-2.6.2.min.css">
+</head>
+<body>
+	<div class="wrapper maxw">
+		<div class="page1_user ">
+			<div class="userinfo">
+				<div class="avatar">
+					<img src="" class='myavatar'>
+					<div class="yk"></div>
+				</div>
+				<ul class='info'>
+					<li class='username'>User Name</li>
+					<li><img src="img/id.png" class='idcoin'> 
+						<span class="gameid">0</span>
+						<span class="diamondNum">
+							<img src="img/zuanshi.png">
+							<span class="num">0</span>
+						</span>
+					</li>
+				</ul>
+			</div>
+			<div class="pubtn" id="tpage2">
+				<img src="img/chongzhiicon.png" class='icon'>
+				<span class="text">Diamonds Transfer</span>
+				<div class="go"></div>
+			</div>
+			<div class="pubtn" id="tpage3">
+				<img src="img/mingxiicon.png" class='icon'>
+				<span class="text">History details</span>
+				<div class="go"></div>
+			</div>
+		</div>
+		<div class="page2_expends dn">
+			<div class="topBack maxw">
+				<img src="img/backbutton.png" class="Backpage1">
+				 History details
+			</div>		
+			<div class="topBackSeat"></div>
+			<!-- 时间选择 -->
+				<div class="changeTime">
+					<input type="text" name="" value='time' class='begin time' id='start_date' readonly="readonly">
+					<span class='zs'>-</span>
+					<input type="text" name="" value='time' class='end time' id="end_date" readonly="readonly">
+					<span class="check" id='check'>Check</span>
+				</div>
+				<!-- search -->
+				<div class="pubinp">
+					<input type="text" class="inptxt" id="checkVagueValue"  style="margin-left:1rem;" placeholder="Search by User ID or name">
+					<span class="check" id="checkVague"></span>
+				</div>
+				<!-- history -->
+				<div class="history">
+					<ul id="historyBox">
+						<!-- <li>
+								<div class="h_time pubMiddle">
+									<p>09/26</p>
+									<p>15:21</p>
+								</div>
+								<div class="h_userinfo pubMiddle">
+									<div class="h_avatar"><img src="https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=2623869610,2782492050&fm=58&bpow=600&bpoh=596"></div>
+									<ul>
+										<li class='h_name'>jwei</li>
+										<li class='h_id'>ID 100009</li>
+									</ul>
+								</div>
+								<div class="h_diamonds pubMiddle">
+									<img src="img/zuanshi.png">
+									<span class="num">500</span>
+								</div>
+							</li>
+						-->
+					</ul>
+				</div>
+		</div>
+		<div class="page3_recharge dn minHeight">
+			<div class="topBack maxw">
+				<img src="img/backbutton.png" class='Backpage1'>
+				Distributor Transfer
+			</div>
+			<div class="topBackSeat"></div>
+			<div class="userinfo">
+				<div class="avatar">
+					<img src="#" class='myavatar'>
+					<div class="yk"></div>
+				</div>
+				<ul class='info '>
+					<li class='username'>User Name</li>
+					<li><img src="img/id.png" class='idcoin'> 
+						<span class="gameid"> 123121</span>
+						<span class="diamondNum">
+							<img src="img/zuanshi.png">
+							<span class="num">0</span>
+						</span>
+					</li>
+				</ul>
+			</div>
+			<!-- 充值 -->
+			<div class="rechargeBox">
+				<p class='tips'> User ID <span class='historyBtn' id='historyBtn'>history</span></p>
+				<div class="pubinp">
+					<img src="img/zhanghao.png" class='icon'>
+					<input type="text" name="" class='inptxt' id='userid' maxlength="6" >
+				</div>
+				<div class="usernameShow dn">
+						<img id="c_avatar" src="http://www.gov.cn/govweb/c1417k/201602/5042577/images/608ac1ccc7534e0ca79088fba154ce2d.jpg">
+						<span class="txt">Nickname: <span class="name" id='c_name'> Jpseph</span></span>
+				</div>
+				<p class='tips'>Diamonds to be transferred</p>
+				<div class="pubinp">
+					<img src="img/zuanshi2.png" class='icon'>
+					<input type="text" name="" class='inptxt' id='diamonds' maxlength="8" >
+				</div>
+			</div>
+			<!-- 确定 -->
+			<footer class="confirm" id='confirm'>
+				Confirm
+			</footer>
+		</div>
+	</div>
+	<div class="loading colorW_textC dn"> 
+		<div> loading <span class="dotting"></span> </div>
+	</div>
+	<!-- 确认转账 -->
+	<div class="fullP dn transferAccounts">
+		<div class="sureTransfer">
+			<span class="center accountTips"></span>
+			<ul>
+				<li id="dCancel" class='close'>Close</li>
+				<li id="dSure">Confirm</li>
+			</ul>
+		</div>
+	</div>
+	<!-- 转账成功 -->
+	<div class="fullP successBox dn">
+		<div class="success">
+			<img src="img/tongguo-button.png">
+			<p>Success</p>
+		</div>
+	</div>
+	<!-- 提示框 -->
+	<div class="fullP tipsBoxs dn" id="tipsBoxs">
+		<div class="tipsMinBox">
+			<p id="tipsContent"></p>
+			<ul>
+				<li class="close">Close</li>
+			</ul>
+		</div>
+	</div>
+	<!-- 联系人列表 -->
+	<div class="fullP dn contacts" id="contacts">
+		<ul>
+			<li>
+				<div class="h_userinfo pubMiddle">
+					<div class="h_avatar"><img src="https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=2623869610,2782492050&fm=58&bpow=600&bpoh=596"></div>
+					<ul>
+						<li class='h_name'>jwei</li>
+						<li class='h_id'>ID 100009</li>
+					</ul>
+				</div>
+			</li>
+			<li>
+				<div class="h_userinfo pubMiddle">
+					<div class="h_avatar"><img src="https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=2623869610,2782492050&fm=58&bpow=600&bpoh=596"></div>
+					<ul>
+						<li class='h_name'>jwei</li>
+						<li class='h_id'>ID 100009</li>
+					</ul>
+				</div>
+			</li>
+			<li>
+				<div class="h_userinfo pubMiddle">
+					<div class="h_avatar"><img src="https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=2623869610,2782492050&fm=58&bpow=600&bpoh=596"></div>
+					<ul>
+						<li class='h_name'>jwei</li>
+						<li class='h_id'>ID 100009</li>
+					</ul>
+				</div>
+			</li>
+			<li>
+				<div class="h_userinfo pubMiddle">
+					<div class="h_avatar"><img src="https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=2623869610,2782492050&fm=58&bpow=600&bpoh=596"></div>
+					<ul>
+						<li class='h_name'>jwei</li>
+						<li class='h_id'>ID 100009</li>
+					</ul>
+				</div>
+			</li>
+		</ul>
+	</div>	
+</body>
+<!-- <script type="text/javascript" src='build/main.js'></script> -->
+<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="js/mobiscroll.custom-2.6.2.min.js"></script>
+<script type="text/javascript" src="js/tool.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+<script type="text/javascript">
+	
+	//日历遍历
+	$(function () {
+	        var curr = new Date().getFullYear();
+	        var opt = {
+	            date:{preset : 'date'},
+	            datetime:{ preset : 'datetime', minDate: new Date(2012,3,10,9,22), maxDate: new Date(), stepMinute: 5  },
+	        }
+            var d=new Date();
+          	var str=jwei.getTenNum((d.getMonth()+1))+"/"+jwei.getTenNum(d.getDate())+"/"+d.getFullYear();
+
+           $('#start_date').val(str)
+                    .scroller('destroy')
+                    .scroller($.extend(opt["date"], { theme: "default1", mode: "mixed", display: "modal", lang: "ios" }));
+
+           $('#end_date').val(str)
+                    .scroller('destroy')
+                    .scroller($.extend(opt["date"], { theme: "default1", mode: "mixed", display: "modal", lang: "android" }));
+    });
+
+	
+</script>
+</html>
