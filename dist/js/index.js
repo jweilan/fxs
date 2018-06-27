@@ -3,14 +3,19 @@ $(function () {
 		args:jwei.args(),
 		ChangeUrl:"/web/api/franchiser_diamond",//转移钻石接口;target为转移目标diamond为钻石数量
 		searchUrl:"/web/api/franchiser_diamond_log",//搜索转移记录start：开始时间戳end：结束时间戳search：搜索目标
-		baseUrl:false?'http://api.server.tpt.3patticlub.net':'http://192.168.1.137:8280',
+		baseUrl:false?'http://api.server.tpt.3patticlub.net':'http://192.168.1.135:8080',
 		diamond:0,
+		accountArr:[],
 	}
 	var dfArgs = 'account=' + mainCtr.args.account + "&channel=" + mainCtr.args.channel + '&time=' + mainCtr.args.time + '&checksum=' + mainCtr.args.checksum;
-
-	bindTouchEvent($("#tpage2"),function(ele){$(ele).addClass('pubtnactive'); },function(ele){$(ele).removeClass('pubtnactive'); },function(ele){$(".page1_user").hide(); $(".page3_recharge").show(); });
+	bindTouchEvent($("#tpage2"),function(ele){$(ele).addClass('pubtnactive'); },
+		function(ele){$(ele).removeClass('pubtnactive'); },
+		function(ele){
+			$(".page1_user").hide();
+			$(".page3_recharge").show();
+	});
+	
 	bindTouchEvent($("#tpage3"),function(ele){$(ele).addClass('pubtnactive'); },function(ele){$(ele).removeClass('pubtnactive'); },function(ele){$(".page1_user").hide(); $(".page2_expends").show(); });
-
 	//转账
 	bindTouchEvent($("#dSure"),function(ele){
 		$(ele).addClass('active');
@@ -49,30 +54,59 @@ $(function () {
 			if(e.target.nodeName!='A'){
 				// e.preventDefault();//决解安卓端bug
 			}
+			e.preventDefault();//决解安卓端bug
 			call(this);
 		})
-		$(ele).on(touche,function(){
+		$(ele).on(touche,function(e){
+			e.preventDefault();//决解安卓端bug
 			call2(this);
 			call3(this);
 
 		})
-		$(ele).on(touchm,function(){
+		$(ele).on(touchm,function(e){
+			e.preventDefault();//决解安卓端bug
 			call2(this);
 		})
 	}
 	
-	function templates(data){
+	function templates(data,flag){
 		var lists=eval(data.data),
 			temp="";
-		for(var i=0;i<lists.length;i++){
-			var Alist=lists[i],times=jwei.DateDiffBack(Alist.time*1000,1);
-			var str='<li> <div class="h_time pubMiddle"> <p>'+
-					times.m+'</p><p>'+times.h+'</p></div> <div class="h_userinfo pubMiddle"> <div class="h_avatar"><img src="'+
-					Alist.avatar+'"></div> <ul> <li class="h_name">'+Alist.name+'</li> <li class="h_id">ID '+
-					Alist.target+'</li></ul></div><div class="h_diamonds pubMiddle"><img src="img/zuanshi.png"><span class="num">'+Alist.diamond+'</span> </div> </li>'
-			temp+=str;
+		if(flag){
+			mainCtr.accountArr=[];//初始化
+			for(var i=0;i<lists.length;i++){
+				var Alist=lists[i],times=jwei.DateDiffBack(Alist.time*1000,1);
+				if(mainCtr.accountArr.indexOf(Alist.target)==-1){
+					var str='<li><div class="h_userinfo pubMiddle"> <div class="h_avatar"><img src="'+
+						Alist.avatar+'"></div> <ul> <li class="h_name">'+Alist.name+'</li> <li class="h_id">ID <span class="account">'+
+						Alist.target+'</span></li></ul></div></li>'
+					temp+=str;
+					mainCtr.accountArr.push(Alist.target);
+				}
+			}
+			if(lists.length==0){
+				var str="<li class='nohistory'>No History</li>";
+				temp+=str;
+			}
+			$("#contactsBox>ul").html(temp);
+			// 选择某个用户
+			$("#contactsBox>ul>li").on("click",function(){
+				var account=$(this).find('.account').html();
+				$("#userid").val(account);
+				$("#contacts").hide();
+				checkId(account);
+			})
+		}else{
+			for(var i=0;i<lists.length;i++){
+				var Alist=lists[i],times=jwei.DateDiffBack(Alist.time*1000,1);
+				var str='<li> <div class="h_time pubMiddle"> <p>'+
+						times.m+'</p><p>'+times.h+'</p></div> <div class="h_userinfo pubMiddle"> <div class="h_avatar"><img src="'+
+						Alist.avatar+'"></div> <ul> <li class="h_name">'+Alist.name+'</li> <li class="h_id">ID '+
+						Alist.target+'</li></ul></div><div class="h_diamonds pubMiddle"><img src="img/zuanshi.png"><span class="num">'+Alist.diamond+'</span> </div> </li>'
+				temp+=str;
+			}
+			$("#historyBox").html(temp);
 		}
-		$("#historyBox").html(temp);
 	}
 	//验证当前选择的时间
 	function currTime(){
@@ -90,7 +124,6 @@ $(function () {
 	$("#checkVague").on("click",function(){
 		 getDateList($("#checkVagueValue").val());
 	})
-
 	// 输入用户id
 	$('#userid').bind('input propertychange', function() {  
 	    switch($(this).val().length){
@@ -105,6 +138,7 @@ $(function () {
 	    		break;
 	    }
 	});
+
 	//确定转账
 	$("#confirm").on("click",function(){
 		var diamondinp=$("#diamonds").val().trim(),
@@ -152,9 +186,30 @@ $(function () {
 			},
 		})
 	}
+	getHistoryAccount();
 	//得到历史转账的account
 	function getHistoryAccount(){
-		
+		var t=new Date().getTime();
+		var ts=~~(t/1000)+86400;
+			urls=mainCtr.baseUrl+"/web/api/franchiser_diamond_log?"+dfArgs+"&start=1514736000&end="+ts;
+		loadingTarget(true);
+		$.ajax({
+			type:"GET",
+			url:urls,
+			dataType:'jsonp',
+			jsonp: 'callback',
+			success:function(data){
+				switch(data.code){
+					case 0:
+						templates(data,true);
+						break;
+					case 1:
+						tips("Failed to verify, please try again or contact customer service");//new 
+						break;
+				}
+				loadingTarget(false);
+			}
+		})
 	}
 	//时间查转账记录
 	function getDateList(searchName){
@@ -186,8 +241,13 @@ $(function () {
 	}
 	//历史用户
 	$("#historyBtn").on("click",function(){
+		console.log("穿透了")
 		$("#contacts").show();
 	})
+	$("#contacts").on("click",function(){
+		$("#contacts").hide();
+	})
+	
 
 	//转账钻石
 	function transferAccounts(id,diamondNum,calls){
@@ -203,6 +263,9 @@ $(function () {
 						$(".successBox").show();
 						mainCtr.diamond-=diamondNum;
 						updateDiamondTem();
+						if(mainCtr.accountArr.indexOf(+id)==-1){//不是历史用户不用遍历
+							getHistoryAccount();
+						}
 						break;
 					case -1:
 						tips("Network Error, please try again later.");//new

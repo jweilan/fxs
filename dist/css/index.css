@@ -28,6 +28,15 @@ div:focus{
 input{
 	-webkit-user-select:auto;
 }
+.iosBug{
+	-webkit-box-flex: 1;
+	-webkit-flex: 1;
+	    -ms-flex: 1;
+	        flex: 1;
+    overflow-y:auto;
+    -webkit-overflow-scrolling: touch;
+    -webkit-transform: translate3d(0,0,0);
+}
 .maxw{
 	max-width: 800px;
 }
@@ -514,8 +523,32 @@ li{
 .historyBtn{
 	float: right;
 	margin-right:2rem;
+	text-decoration:underline; 
+	color:#FFF;
 }
-.contacts>ul>li{
+.contactsBox>ul{
+	
+}
+.nohistory{
+	text-align:center;
+	line-height:3rem;
+	color:#FFF;
+}
+.contactsBox>ul>li{
 	position: relative;
 	height:3rem;
+	border-bottom: 1px solid #000;
+}
+.contactsBox{
+	background:#1d2943;
+	width:80%;
+	margin:10%;
+	border-radius:1rem;
+	max-height: 80%;
+	overflow-y:scroll;
+}
+.page{
+	position: absolute;
+	width:100%;
+	left:0;
 }
