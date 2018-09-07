@@ -474,11 +474,6 @@ li{
 	opacity: 0.7;
 	color:#8b9fc2;
 }
-.tipsMinBox .active{
-	opacity: 0.7;
-	color:#8b9fc2;
-}
-
 .success{
 	width:5rem;
 	height:7rem;
@@ -494,6 +489,10 @@ li{
 .success img{
 	width:100%;
 }
+.tipsMinBox .active{
+	opacity: 0.7;
+	color:#8b9fc2;
+}
 .tipsMinBox{
 	width:70%;
 	height:6rem;
@@ -507,6 +506,7 @@ li{
 	overflow:hidden;
 	background: #1d2943;
 	padding:1rem;
+	font-size:1rem;
 	color:#b1c5e8;
 }
 .tipsMinBox li{

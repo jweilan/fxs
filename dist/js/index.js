@@ -3,7 +3,7 @@ $(function () {
 		args:jwei.args(),
 		ChangeUrl:"/web/api/franchiser_diamond",//转移钻石接口;target为转移目标diamond为钻石数量
 		searchUrl:"/web/api/franchiser_diamond_log",//搜索转移记录start：开始时间戳end：结束时间戳search：搜索目标
-		baseUrl:false?'http://api.server.tpt.3patticlub.net':'http://192.168.1.135:8080',
+		baseUrl:true?'http://api.server.tpt.3patticlub.net':'http://192.168.1.135:8080',
 		diamond:0,
 		accountArr:[],
 	}
@@ -323,6 +323,20 @@ $(function () {
 		$("#tipsContent").html(str);
 		$("#tipsBoxs").show();
 	}
-
-
+	function fs(){
+		var win = window,
+		doc = document;
+		function setFontSize() {
+		　　var winWidth =window.outerWidth||document.documentElement.clientWidth||document.body.clientWidth||320;
+		　　//640这个数字是根据你的设计图的实际大小来的，所以值具体根据设计图的大小
+		　　var size = (winWidth / 640) * 34;
+		　　doc.documentElement.style.fontSize = (size < 34 ? size : 34) + 'px';
+		};
+	  //这里我们给个定时器来实现页面加载完毕再进行字体设置
+		setTimeout(function() {
+		　　//初始化
+		　　setFontSize();
+		}, 100);
+	}
+	fs();
 });

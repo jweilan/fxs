@@ -4,14 +4,15 @@
 	<meta name="viewport" content="width=device-width,user-scalable=no">
 	<meta name = "format-detection" content = "telephone=no">
 	<meta charset="UTF-8">
+	<link rel="SHORTCUT ICON" href="img/icon.ico">
 	<title>Distributor System</title>
-	<!-- <link rel="stylesheet" type="text/css" href="build/main.css"> -->
-	<link rel="stylesheet" type="text/css" href="css/index.css">
-	<link rel="stylesheet" type="text/css" href="css/mobiscroll.custom-2.6.2.min.css">
+	<link rel="stylesheet" type="text/css" href="build/main.css?v=2">
+	<!-- <link rel="stylesheet" type="text/css" href="css/index.css">
+	<link rel="stylesheet" type="text/css" href="css/mobiscroll.custom-2.6.2.min.css"> -->
 </head>
 <body>
 	<div class="wrapper maxw">
-		<div class="page1_user ">
+		<div class="page1_user page">
 			<div class="userinfo">
 				<div class="avatar">
 					<img src="" class='myavatar'>
@@ -39,7 +40,7 @@
 				<div class="go"></div>
 			</div>
 		</div>
-		<div class="page2_expends dn">
+		<div class="page2_expends page dn">
 			<div class="topBack maxw">
 				<img src="img/backbutton.png" class="Backpage1">
 				 History details
@@ -81,7 +82,7 @@
 					</ul>
 				</div>
 		</div>
-		<div class="page3_recharge dn minHeight">
+		<div class="page3_recharge dn page minHeight">
 			<div class="topBack maxw">
 				<img src="img/backbutton.png" class='Backpage1'>
 				Distributor Transfer
@@ -105,7 +106,7 @@
 			</div>
 			<!-- 充值 -->
 			<div class="rechargeBox">
-				<p class='tips'> User ID <span class='historyBtn' id='historyBtn'>history</span></p>
+				<p class='tips'> User ID <span class='historyBtn' id='historyBtn'>History ID</span></p>
 				<div class="pubinp">
 					<img src="img/zhanghao.png" class='icon'>
 					<input type="text" name="" class='inptxt' id='userid' maxlength="6" >
@@ -157,53 +158,37 @@
 	</div>
 	<!-- 联系人列表 -->
 	<div class="fullP dn contacts" id="contacts">
-		<ul>
-			<li>
-				<div class="h_userinfo pubMiddle">
-					<div class="h_avatar"><img src="https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=2623869610,2782492050&fm=58&bpow=600&bpoh=596"></div>
-					<ul>
-						<li class='h_name'>jwei</li>
-						<li class='h_id'>ID 100009</li>
-					</ul>
-				</div>
-			</li>
-			<li>
-				<div class="h_userinfo pubMiddle">
-					<div class="h_avatar"><img src="https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=2623869610,2782492050&fm=58&bpow=600&bpoh=596"></div>
-					<ul>
-						<li class='h_name'>jwei</li>
-						<li class='h_id'>ID 100009</li>
-					</ul>
-				</div>
-			</li>
-			<li>
-				<div class="h_userinfo pubMiddle">
-					<div class="h_avatar"><img src="https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=2623869610,2782492050&fm=58&bpow=600&bpoh=596"></div>
-					<ul>
-						<li class='h_name'>jwei</li>
-						<li class='h_id'>ID 100009</li>
-					</ul>
-				</div>
-			</li>
-			<li>
-				<div class="h_userinfo pubMiddle">
-					<div class="h_avatar"><img src="https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=2623869610,2782492050&fm=58&bpow=600&bpoh=596"></div>
-					<ul>
-						<li class='h_name'>jwei</li>
-						<li class='h_id'>ID 100009</li>
-					</ul>
-				</div>
-			</li>
-		</ul>
+		<div class="contactsBox iosBug" id="contactsBox"  scroll="no">
+			<ul>
+				<!-- <li>
+					<div class="h_userinfo pubMiddle">
+						<div class="h_avatar"><img src="https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=2623869610,2782492050&fm=58&bpow=600&bpoh=596"></div>
+						<ul>
+							<li class='h_name'>jwei</li>
+							<li class='h_id'>ID <span class='account'>100009</span></li>
+						</ul>
+					</div>
+				</li>
+				<li>
+					<div class="h_userinfo pubMiddle">
+						<div class="h_avatar"><img src="https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=2623869610,2782492050&fm=58&bpow=600&bpoh=596"></div>
+						<ul>
+							<li class='h_name'>jwei</li>
+							<li class='h_id'>ID <span class='account'>100001</span></li>
+						</ul>
+					</div>
+				</li> -->
+				
+			</ul>
+		</div>
 	</div>	
 </body>
-<!-- <script type="text/javascript" src='build/main.js'></script> -->
-<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src='build/main.js?v=2'></script>
+<!-- <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="js/mobiscroll.custom-2.6.2.min.js"></script>
 <script type="text/javascript" src="js/tool.js"></script>
-<script type="text/javascript" src="js/index.js"></script>
+<script type="text/javascript" src="js/index.js"></script> -->
 <script type="text/javascript">
-	
 	//日历遍历
 	$(function () {
 	        var curr = new Date().getFullYear();
@@ -222,7 +207,5 @@
                     .scroller('destroy')
                     .scroller($.extend(opt["date"], { theme: "default1", mode: "mixed", display: "modal", lang: "android" }));
     });
-
-	
 </script>
 </html>
