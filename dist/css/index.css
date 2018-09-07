@@ -35,7 +35,8 @@ input{
 	        flex: 1;
     overflow-y:auto;
     -webkit-overflow-scrolling: touch;
-    -webkit-transform: translate3d(0,0,0);
+	-webkit-transform: translate3d(0,0,0);
+	transform: translate3d(0,0,0);
 }
 .maxw{
 	max-width: 800px;
@@ -187,9 +188,6 @@ li{
 }
 
 /* 充值 */
-.rechargeBox{
-
-}
 .rechargeBox .tips{
 	font-size: 0.7rem;
     color: #8b9fc2;
@@ -262,7 +260,6 @@ li{
 	background-size: 100% 100%;
 	border-radius:1.5rem;
 	position:absolute;
-	bottom:1rem;
 	text-align: center;
 	color:#FFF;
 	line-height:2.5rem;
@@ -412,7 +409,6 @@ li{
     display: inline-block; min-width: 0.1rem; min-height: 0.1rem;
     box-shadow: 2px 0 currentColor, 6px 0 currentColor, 10px 0 currentColor; /* for IE9+, ..., 3个点 */
     animation: dot 2s infinite step-start both; /* for IE10+, ... */
-    *zoom: expression(this.innerHTML = '......'); /*  for IE7. 若无需兼容IE7, 此行删除 */
 }
 .dotting:before { content: '...'; } /* for IE8. 若无需兼容IE8, 此行以及下一行删除*/
 .dotting::before { content: ''; } /* for IE9+ 覆盖 IE8 */
@@ -526,9 +522,6 @@ li{
 	text-decoration:underline; 
 	color:#FFF;
 }
-.contactsBox>ul{
-	
-}
 .nohistory{
 	text-align:center;
 	line-height:3rem;
@@ -551,4 +544,30 @@ li{
 	position: absolute;
 	width:100%;
 	left:0;
+}
+/* 商品道具 */
+.shopList{
+	margin:0.5rem;
+	overflow: hidden;
+}
+.shopList li{
+	width: 30%;
+	float: left;
+	height: 3.5rem;
+	position: relative;
+	margin:0.1rem;
+	border:0.1rem #7487a7 solid;
+	border-radius: 0.5rem;
+}
+.shopList li img{
+	width: 3rem;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	margin:auto;
+}
+.shopList .spactive{
+	border:0.1rem #03f7f9 solid;
 }

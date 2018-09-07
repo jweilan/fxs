@@ -9,7 +9,7 @@ app.use(express.static('dist'));
 
 
 app.listen(801,function(){
-	console.log("启动成功");
+	console.log("启动成功127.0.0.1:801进行访问");
 })
 app.get('/',function(req,res){
 	res.sendfile('index.html');
@@ -74,7 +74,7 @@ app.get('/myinfo',function(req,res){
   	res.end(json);
 })
 
-app.use("/web",proxy({target:"http://192.168.1.137:8280",changeOrigin:true}));
+// app.use("/web",proxy({target:"http://192.168.1.137:8280",changeOrigin:true}));
 // app.use("/web",proxy({target:"http://api.server.friendpokerol.com",changeOrigin:true}));
 
 // app.use("/web/api",proxy({target:"http://api.server.friendpokerol.com",changeOrigin:true}));

@@ -8,6 +8,46 @@ $(function () {
 		accountArr:[],
 	}
 	var dfArgs = 'account=' + mainCtr.args.account + "&channel=" + mainCtr.args.channel + '&time=' + mainCtr.args.time + '&checksum=' + mainCtr.args.checksum;
+	var plugin={
+		loadingTarget:function(flag){//loading框
+			var str='<div class="loading colorW_textC dn"> <div> loading <span class="dotting"></span> </div> </div>';
+			if($(".loading").length==0){
+				$("body").append(str);
+			}
+			flag?$('.loading').show():$('.loading').hide();
+		},
+		tips:function(str){//提示
+			$("#tipsContent").html(str);
+			$("#tipsBoxs").show();
+		},
+		updateDiamondTem:function(){//更新自己的钻石
+			$('.diamondNum .num').html(mainCtr.diamond);
+		},
+		OtherEvent:function(){
+			$(".successBox").on("click",function(){$(this).hide()});
+			//历史用户
+			$("#historyBtn").on("click",function(){$("#contacts").show();})
+			$("#contacts").on("click",function(){ $("#contacts").hide(); })
+			// 根据时间得到历史记录
+			$("#check").on("click",function(){ getDateList(); })
+			// 根据时间和关键词得到历史记录
+			$("#checkVague").on("click",function(){ getDateList($("#checkVagueValue").val()); })
+			// 子页面之间返回按钮
+			$(".Backpage1").on("click",function(){
+				$(".page1_user").show();
+				$(".page3_recharge").hide();
+				$(".page2_expends").hide();
+				plugin.loadingTarget(false);
+			})
+			//选择商品
+			$("#shopList li").on('click',function(){
+				$("#shopList li").removeClass("spactive");
+				$(this).attr({"class":"spactive"});
+				$("#shopicon").attr({"src":$(this).find("img").attr("src")});
+			})
+		}
+	}
+	plugin.OtherEvent();
 	bindTouchEvent($("#tpage2"),function(ele){$(ele).addClass('pubtnactive'); },
 		function(ele){$(ele).removeClass('pubtnactive'); },
 		function(ele){
@@ -35,16 +75,8 @@ $(function () {
 	},function(ele){
 		$(".fullP").hide();
 	})
-
-	// 子页面之间返回按钮
-	$(".Backpage1").on("click",function(){
-		$(".page1_user").show();
-		$(".page3_recharge").hide();
-		$(".page2_expends").hide();
-		loadingTarget(false);
-	})
-	$(".successBox").on("click",function(){$(this).hide()});
 	
+	// 触摸事件
 	function bindTouchEvent(ele,call,call2,call3){
 		var isSupportTouch = "ontouchend" in document ? true : false;
 		var touchs=isSupportTouch?'touchstart':'mousedown',
@@ -68,7 +100,7 @@ $(function () {
 			call2(this);
 		})
 	}
-	
+	// 转账历史记录
 	function templates(data,flag){
 		var lists=eval(data.data),
 			temp="";
@@ -118,12 +150,7 @@ $(function () {
 			return {"start":~~(s/1000),"end":~~(e/1000)+86400};
 		}
 	}
-	$("#check").on("click",function(){
-		 getDateList();
-	})
-	$("#checkVague").on("click",function(){
-		 getDateList($("#checkVagueValue").val());
-	})
+	
 	// 输入用户id
 	$('#userid').bind('input propertychange', function() {  
 	    switch($(this).val().length){
@@ -145,17 +172,17 @@ $(function () {
 			userid=$("#userid").val().trim(),
 			cName=$("#c_name").html();
 		if(!userid||userid.length!=6){
-			tips("Please enter the recipient User ID");//new
+			plugin.tips("Please enter the recipient User ID");//new
 			return;
 		}
 		if(!diamondinp){
 			// new
-			tips("Please enter the amount of diamonds to be transferred")
+			plugin.tips("Please enter the amount of diamonds to be transferred")
 			return;
 		}
 		if(+diamondinp>+$(".diamondNum .num").html()){
 			// new
-			tips("The amount of diamonds entered exceeds your balance");
+			plugin.tips("The amount of diamonds entered exceeds your balance");
 			return;
 		}
 		if(userid!=""&&diamondinp!=""){
@@ -166,7 +193,7 @@ $(function () {
 	});
 	// 查找用户id
 	function checkId(id){
-		loadingTarget(true);
+		plugin.loadingTarget(true);
 		$.ajax({
 			type:"GET",
 			url:mainCtr.baseUrl+"/web/api/account_info?id="+id,
@@ -174,15 +201,15 @@ $(function () {
 			jsonp: 'callback',
 			success:function(data){
 				if(!data.avatar&&!data.name){
-					tips("User ID is incorrect, please  try again");// new
+					plugin.tips("User ID is incorrect, please  try again");// new
 					$("#userid").val("");
-					loadingTarget(false);
+					plugin.loadingTarget(false);
 					return;
 				}
 				$("#c_avatar").attr({'src':data.avatar});
 				$("#c_name").html(data.name);
 				$(".usernameShow").show();
-				loadingTarget(false);
+				plugin.loadingTarget(false);
 			},
 		})
 	}
@@ -192,7 +219,7 @@ $(function () {
 		var t=new Date().getTime();
 		var ts=~~(t/1000)+86400;
 			urls=mainCtr.baseUrl+"/web/api/franchiser_diamond_log?"+dfArgs+"&start=1514736000&end="+ts;
-		loadingTarget(true);
+		plugin.loadingTarget(true);
 		$.ajax({
 			type:"GET",
 			url:urls,
@@ -204,10 +231,10 @@ $(function () {
 						templates(data,true);
 						break;
 					case 1:
-						tips("Failed to verify, please try again or contact customer service");//new 
+						plugin.tips("Failed to verify, please try again or contact customer service");//new 
 						break;
 				}
-				loadingTarget(false);
+				plugin.loadingTarget(false);
 			}
 		})
 	}
@@ -217,10 +244,10 @@ $(function () {
 			urls=mainCtr.baseUrl+"/web/api/franchiser_diamond_log?"+dfArgs+"&start="+t.start+"&end="+t.end;
 			if(searchName){urls+="&search="+searchName}
 		if(!t){
-			tips(" Please select the correct date range");//new 
+			plugin.tips(" Please select the correct date range");//new 
 			return
 		}
-		loadingTarget(true);
+		plugin.loadingTarget(true);
 		$.ajax({
 			type:"GET",
 			url:urls,
@@ -232,26 +259,17 @@ $(function () {
 						templates(data);
 						break;
 					case 1:
-						tips("Failed to verify, please try again or contact customer service");//new 
+						plugin.tips("Failed to verify, please try again or contact customer service");//new 
 						break;
 				}
-				loadingTarget(false);
+				plugin.loadingTarget(false);
 			}
 		})
 	}
-	//历史用户
-	$("#historyBtn").on("click",function(){
-		console.log("穿透了")
-		$("#contacts").show();
-	})
-	$("#contacts").on("click",function(){
-		$("#contacts").hide();
-	})
-	
 
 	//转账钻石
 	function transferAccounts(id,diamondNum,calls){
-		loadingTarget(true);
+		plugin.loadingTarget(true);
 		$.ajax({
 			type:"GET",
 			url:mainCtr.baseUrl+"/web/api/franchiser_diamond?"+dfArgs+"&target="+id+"&diamond="+diamondNum,
@@ -262,31 +280,31 @@ $(function () {
 					case 0:
 						$(".successBox").show();
 						mainCtr.diamond-=diamondNum;
-						updateDiamondTem();
+						plugin.updateDiamondTem();
 						if(mainCtr.accountArr.indexOf(+id)==-1){//不是历史用户不用遍历
 							getHistoryAccount();
 						}
 						break;
 					case -1:
-						tips("Network Error, please try again later.");//new
+						plugin.tips("Network Error, please try again later.");//new
 						break;
 					case 1:
-						tips("Failed to verify, please try again or contact customer service.");//new
+						plugin.tips("Failed to verify, please try again or contact customer service.");//new
 						break;
 					case 6:
-						tips("Insufficient diamond balance.");//new
+						plugin.tips("Insufficient diamond balance.");//new
 						break;
 					case 4:
-						tips("You cannot transfer to target user.");//new
+						plugin.tips("You cannot transfer to target user.");//new
 						break;
 				}
-				loadingTarget(false);
+				plugin.loadingTarget(false);
 				calls();
 			},
 			error:function(err){
-				loadingTarget(false);
+				plugin.loadingTarget(false);
 				calls();
-				tips("Network Error, please try again later.");//new
+				plugin.tips("Network Error, please try again later.");//new
 			}
 		})
 	}
@@ -302,29 +320,13 @@ $(function () {
 				$('.myavatar').attr({"src":data.avatar?data.avatar:"img/mrtx.png"});
 				$('.username').html(data.name);
 				$('.gameid').html(mainCtr.args.account);
-				updateDiamondTem();
+				plugin.updateDiamondTem();
 				
 			}
 		});
 	}
-	function loadingTarget(flag){
-		var str='<div class="loading colorW_textC dn"> <div> loading <span class="dotting"></span> </div> </div>';
-		if($(".loading").length==0){
-			$("body").append(str);
-		}
-		flag?$('.loading').show():$('.loading').hide();
-	}
-	//更新自己的钻石。。
-	function updateDiamondTem(){
-		$('.diamondNum .num').html(mainCtr.diamond);
-	}
-	//提示
-	function tips(str){
-		$("#tipsContent").html(str);
-		$("#tipsBoxs").show();
-	}
+	
 	function fs(){
-		var win = window,
 		doc = document;
 		function setFontSize() {
 		　　var winWidth =window.outerWidth||document.documentElement.clientWidth||document.body.clientWidth||320;
