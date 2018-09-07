@@ -259,6 +259,7 @@ li{
 	background:url(../img/confirmbutton.png) no-repeat;
 	background-size: 100% 100%;
 	border-radius:1.5rem;
+	margin-top:2rem;
 	position:absolute;
 	text-align: center;
 	color:#FFF;

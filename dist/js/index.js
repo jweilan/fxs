@@ -3,7 +3,7 @@ $(function () {
 		args:jwei.args(),
 		ChangeUrl:"/web/api/franchiser_diamond",//转移钻石接口;target为转移目标diamond为钻石数量
 		searchUrl:"/web/api/franchiser_diamond_log",//搜索转移记录start：开始时间戳end：结束时间戳search：搜索目标
-		baseUrl:true?'http://api.server.tpt.3patticlub.net':'http://192.168.1.135:8080',
+		baseUrl:false?'http://franchiser.pokerclubph.com':'http://192.168.1.137:8280',
 		diamond:0,
 		accountArr:[],
 	}
@@ -54,7 +54,6 @@ $(function () {
 			$(".page1_user").hide();
 			$(".page3_recharge").show();
 	});
-	
 	bindTouchEvent($("#tpage3"),function(ele){$(ele).addClass('pubtnactive'); },function(ele){$(ele).removeClass('pubtnactive'); },function(ele){$(".page1_user").hide(); $(".page2_expends").show(); });
 	//转账
 	bindTouchEvent($("#dSure"),function(ele){
@@ -62,7 +61,7 @@ $(function () {
 	},function(ele){
 		$(ele).removeClass('active')
 	},function(ele){
-		transferAccounts($("#userid").val().trim(),$("#diamonds").val().trim(),function(){
+		transferAccounts($("#userid").val().trim(),$("#diamonds").val().trim(),$("#shopList .spactive").attr("data-type"),function(){
 			$(".transferAccounts").hide();
 		});
 		$(".transferAccounts").hide();
@@ -150,47 +149,6 @@ $(function () {
 			return {"start":~~(s/1000),"end":~~(e/1000)+86400};
 		}
 	}
-	
-	// 输入用户id
-	$('#userid').bind('input propertychange', function() {  
-	    switch($(this).val().length){
-	    	case 6:
-	    		checkId($(this).val());
-	    		break;
-	    	case 8:
-	    		checkId($(this).val());
-	    		break;
-	    	default:
-	    		$(".usernameShow").hide();
-	    		break;
-	    }
-	});
-
-	//确定转账
-	$("#confirm").on("click",function(){
-		var diamondinp=$("#diamonds").val().trim(),
-			userid=$("#userid").val().trim(),
-			cName=$("#c_name").html();
-		if(!userid||userid.length!=6){
-			plugin.tips("Please enter the recipient User ID");//new
-			return;
-		}
-		if(!diamondinp){
-			// new
-			plugin.tips("Please enter the amount of diamonds to be transferred")
-			return;
-		}
-		if(+diamondinp>+$(".diamondNum .num").html()){
-			// new
-			plugin.tips("The amount of diamonds entered exceeds your balance");
-			return;
-		}
-		if(userid!=""&&diamondinp!=""){
-			//new
-			$(".accountTips").html("Are you sure you want to transfer "+diamondinp+" diamonds to "+cName+"("+userid+")?");
-			$(".transferAccounts").show();
-		}
-	});
 	// 查找用户id
 	function checkId(id){
 		plugin.loadingTarget(true);
@@ -213,7 +171,6 @@ $(function () {
 			},
 		})
 	}
-	getHistoryAccount();
 	//得到历史转账的account
 	function getHistoryAccount(){
 		var t=new Date().getTime();
@@ -235,6 +192,10 @@ $(function () {
 						break;
 				}
 				plugin.loadingTarget(false);
+			},
+			error:function(){
+				plugin.loadingTarget(false);
+				plugin.tips("Network Error, please try again later.1");//new
 			}
 		})
 	}
@@ -266,20 +227,19 @@ $(function () {
 			}
 		})
 	}
-
-	//转账钻石
-	function transferAccounts(id,diamondNum,calls){
+	//转账道具
+	function transferAccounts(id,propNum,propType,calls){
 		plugin.loadingTarget(true);
 		$.ajax({
 			type:"GET",
-			url:mainCtr.baseUrl+"/web/api/franchiser_diamond?"+dfArgs+"&target="+id+"&diamond="+diamondNum,
+			url:mainCtr.baseUrl+"/web/api/union_item_send?"+dfArgs+"&target="+id+"&item="+propType+"&count="+propNum,
 			dataType:'jsonp',
 			jsonp: 'callback',
 			success:function(data){
 				switch(data.code){
 					case 0:
 						$(".successBox").show();
-						mainCtr.diamond-=diamondNum;
+						mainCtr.diamond-=propNum;
 						plugin.updateDiamondTem();
 						if(mainCtr.accountArr.indexOf(+id)==-1){//不是历史用户不用遍历
 							getHistoryAccount();
@@ -291,10 +251,13 @@ $(function () {
 					case 1:
 						plugin.tips("Failed to verify, please try again or contact customer service.");//new
 						break;
+					case 5://账号不存在
+						plugin.tips("User ID is incorrect, please  try again");//new
+						break;
 					case 6:
 						plugin.tips("Insufficient diamond balance.");//new
 						break;
-					case 4:
+					case 7:
 						plugin.tips("You cannot transfer to target user.");//new
 						break;
 				}
@@ -304,10 +267,56 @@ $(function () {
 			error:function(err){
 				plugin.loadingTarget(false);
 				calls();
-				plugin.tips("Network Error, please try again later.");//new
+				plugin.tips("Network Error, please try again later.2");//new
 			}
 		})
 	}
+
+	// 输入用户id
+	$('#userid').bind('input propertychange', function() {  
+	    switch($(this).val().length){
+	    	case 6:
+	    		checkId($(this).val());
+	    		break;
+	    	case 8:
+	    		checkId($(this).val());
+	    		break;
+	    	default:
+	    		$(".usernameShow").hide();
+	    		break;
+	    }
+	});
+	//确定转账
+	$("#confirm").on("click",function(){
+		var diamondinp=$("#diamonds").val().trim(),
+			userid=$("#userid").val().trim(),
+			cName=$("#c_name").html();
+		// 检查id
+		if(!userid||userid.length!=6){
+			plugin.tips("Please enter the recipient User ID");//new
+			return;
+		}
+		//检查发送数是否为空
+		if(!diamondinp){
+			// new
+			plugin.tips("Please enter the amount of diamonds to be transferred")
+			return;
+		}
+		//检查收入的转账钻石是否小于自身账户余额
+		// if(+diamondinp>+$(".diamondNum .num").html()){
+		// 	// new
+		// 	plugin.tips("The amount of diamonds entered exceeds your balance");
+		// 	return;
+		// }
+		//
+		if(userid!=""&&diamondinp!=""){
+			//new
+			$(".accountTips").html("Are you sure you want to transfer "+diamondinp+" diamonds to "+cName+"("+userid+")?");
+			$(".transferAccounts").show();
+		}
+	});
+	//得到转账历史账号
+	// getHistoryAccount();
 	if(mainCtr.args.account){//未带参数不初始化
 		//初始化信息
 		$.ajax({
