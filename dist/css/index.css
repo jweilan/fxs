@@ -366,7 +366,7 @@ li{
 	color:#48daff;
 	padding-left: 1.3rem;
 	line-height:2rem;
-	font-size:1rem;
+	font-size:0.8rem;
 	font-weight: bold;
 	width: 2.5rem;
 }
@@ -560,6 +560,22 @@ li{
 	border:0.1rem #7487a7 solid;
 	border-radius: 0.5rem;
 }
+.shopList li .remain{
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	color:#FFF;
+	font-size: 0.7rem;
+	padding: 0 0.2rem;
+    border-radius: 0.3rem;
+	background: rgb(107, 126, 156);
+	word-break: keep-all;
+	max-width: 90%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
 .shopList li img{
 	width: 3rem;
 	position: absolute;
@@ -571,4 +587,8 @@ li{
 }
 .shopList .spactive{
 	border:0.1rem #03f7f9 solid;
+}
+.shopList .spactive>.remain{
+	background: #03f7f9;
+	color:#000;
 }

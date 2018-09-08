@@ -17,6 +17,6 @@ gulp.task('test',()=>{
 	gulp.src(jsarr).pipe(concat('build/main.js')).pipe(uglify()).pipe(gulp.dest('dist'));
 	gulp.src(cssarr).pipe(concat('build/main.css')).pipe(cleanCSS({compatibility:'ie9'})).pipe(gulp.dest('dist'));
 	gulp.src("index.html").pipe(htmlminify()).pipe(gulp.dest('bin'));
-	gulp.src("dist/img/*").pipe(gulp.dest('bin/img'));
+	gulp.src("dist/img/*/*").pipe(gulp.dest('bin/img'));
 	gulp.src("dist/build/*").pipe(gulp.dest('bin/build'));
 })
