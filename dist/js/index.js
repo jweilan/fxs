@@ -3,12 +3,12 @@ $(function () {
 		args:jwei.args(),
 		ChangeUrl:"/web/api/franchiser_diamond",//转移钻石接口;target为转移目标diamond为钻石数量
 		searchUrl:"/web/api/franchiser_diamond_log",//搜索转移记录start：开始时间戳end：结束时间戳search：搜索目标
-		baseUrl:true?'http://franchiser.pokerclubph.com':'http://192.168.1.137:8280',
+		baseUrl:false?'http://api.server.pokerclubph.com':'http://192.168.1.137:8280',
 		diamond:0,
 		accountArr:[],//历史账号记录
-		propArr:["Golden Card","Platinum Card","Diamond Card","Diamond","Emoji","Time Blank"],
-		propImgArr:["card2.png","card3.png","card4.png","diamond01.png","emoji06.png","addtime.png"],
-		propNum:[0,0,0,0,0,0],//道具数量
+		propArr:["Golden Card","Platinum Card","Diamond Card","Diamond","Emoji","Time Blank","Rabbit"],
+		propImgArr:["card2.png","card3.png","card4.png","diamond01.png","emoji06.png","addtime.png","backButton.png"],
+		propNum:[0,0,0,0,0,0,0],//道具数量
 		currPropType:4,//当前选择的道具：默认4钻石
 		loadImg:["prop/card2.png","prop/card3.png","prop/card4.png","prop/diamond01.png","prop/emoji06.png","prop/addtime.png","checkbutton.png","touxiangkuang.png","xinxidk.png"],
 	}
@@ -54,12 +54,8 @@ $(function () {
 		getPropName:function(){//得到道具名字
 			return mainCtr.propArr[mainCtr.currPropType-1];
 		},
-		getPropImgPath:function(name){
-			for(var i=0;i<mainCtr.propArr.length;i++){
-				if(name==mainCtr.propArr[i]){
-					return mainCtr.propImgArr[i];
-				}
-			}
+		getPropImgPath:function(item){
+			return mainCtr.propImgArr[item-1];
 		},
 		setPropNumUI:function(propType,num){//道具数据与ui更新
 			if(mainCtr.propNum[0]==-1)return;//盟主则返回
@@ -186,7 +182,7 @@ $(function () {
 				var str='<li> <div class="h_time pubMiddle"> <p>'+
 						times.m+'</p><p>'+times.h+'</p></div> <div class="h_userinfo pubMiddle"> <div class="h_avatar"><img src="'+
 						Alist.avatar+'"></div> <ul> <li class="h_name">'+Alist.name+'</li> <li class="h_id">ID '+
-						Alist.target+'</li></ul></div><div class="h_diamonds pubMiddle"><img src="img/prop/'+plugin.getPropImgPath(Alist.item_name)+'"><span class="num">'+Alist.count+'</span> </div> </li>'
+						Alist.target+'</li></ul></div><div class="h_diamonds pubMiddle"><img src="img/prop/'+plugin.getPropImgPath(Alist.item)+'"><span class="num">'+Alist.count+'</span> </div> </li>'
 				temp+=str;
 			}
 			if(lists.length==0){
@@ -384,7 +380,7 @@ $(function () {
 			plugin.tips(TIPS.PROP_NUM_NOT_ENOUGH);
 			return;
 		}
-		//
+		
 		if(userid!=""&&diamondinp!=""){
 			//new
 			$(".accountTips").html("Are you sure you want to transfer "+diamondinp+" "+plugin.getPropName()+"  to "+cName+"("+userid+")?");
